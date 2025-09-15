@@ -1,0 +1,13 @@
+{"version": 2, "width": 65, "height": 37, "timestamp": 1757952307, "idle_time_limit": 5.0, "env": {"SHELL": "/usr/bin/zsh", "TERM": "xterm-256color"}}
+[0.190598, "o", "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                \r \r"]
+[0.192408, "o", "\u001b]2;cmpt201@2a2184b78ee4:~/cmpt201-coursework/a3-pub\u0007\u001b]1;..sework/a3-pub\u0007"]
+[0.196443, "o", "\u001b]7;file://2a2184b78ee4/home/cmpt201/cmpt201-coursework/a3-pub\u001b\\"]
+[0.232651, "o", "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[35m[recording] \u001b[34m~/cmpt201-coursework/a3-pub\u001b[32m❯\u001b[39m \u001b[K"]
+[0.232984, "o", "\u001b[?1h\u001b="]
+[0.233298, "o", "\u001b[?2004h"]
+[47.994155, "i", "n"]
+[48.00135, "o", "n"]
+[48.009256, "o", "\b\u001b[1m\u001b[31mn\u001b[0m\u001b[39m"]
+[48.011366, "o", "\b\u001b[1m\u001b[31mn\u001b[0m\u001b[39m\u001b[92mvim touch.c\u001b[39m\u001b[11D"]
+[48.176124, "i", "v"]
+[48.177604, "o", "\b\u001b[1m\u001b[31mn\u001b[1m\u001b[31mv\u001b[0m\u001b[39m"]

@@ -1,0 +1,7 @@
+#include "other.h"
+#include <stdio.h>
+
+int main(void) {
+  printOther();
+  return 0;
+}

@@ -1,0 +1,4 @@
+#include <stdio.h>
+#include "other.h"
+
+void printOther() { printf("Other invoked\n"); }
