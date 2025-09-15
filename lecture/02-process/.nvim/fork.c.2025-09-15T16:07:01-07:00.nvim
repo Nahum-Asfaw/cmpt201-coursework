@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void) {
+  fork();
+  int parentID = getppid();
+  int childID = getpid();
+  printf("Parent ID: %d Child ID: %d\n", parentID, childID);
+  return 0;
+}
