@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+// Pseudocode
+// int main(){
+//
+//  char* runThis
+//  printGet("Enter programs to run.\n", &runThis)
+//  fork()
+//  if (parent){
+//    if (waitpid(...) == -1){ printf("Error msg")}
+//    while(inputs are comming){
+//      printGet("Enter programs to run.\n", &runThis)
+//    }
+//  } else {
+//    execl(...)
+//  }
+//  free (runThis)
+//
+//  return 0;
+// }
+//
+
+int main() {
+
+  char *line; // implementation taken from lab1 sol
+  size_t n = 0;
+
+  printf("Enter programs to run.\n");
+  getline(&line, &n, stdin); // ignore the error msg
+
+  char *runThis = NULL; // lab1
+  char *saveptr = NULL; // lab1
+
+  runThis = strtok_r(line, "\n", &saveptr); // lab1
+
+  pid_t pid = fork();
+  int wstatus = 0;
+
+  while (n == 0) {
+    if (pid) {
+      printf("I'm the child! You entered: %s\n", runThis);
+      execl(runThis, runThis, "/home/cmpt201/cmpt201-coursework/lab2",
+            (char *)NULL);
+    } else {
+      printf("I'm the parent! You entered: %s\n", runThis);
+      if (waitpid(pid, &wstatus, 0) == -1) {
+        perror("Exec failure");
+      }
+    }
+  }
+  return 0;
+}

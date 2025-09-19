@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+// Pseudocode
+// int main(){
+//  
+//  char* runThis
+//  printGet("Enter programs to run.\n", &runThis)
+//  fork()
+//  if (parent){
+//    if (waitpid(...) == -1){ printf("Error msg")}
+//    while(inputs are comming){
+//      printGet("Enter programs to run.\n", &runThis)
+//    }
+//  } else {
+//    execl(...)
+//  }
+//  free (runThis)
+//  
+//  return 0;
+// }
+//
+
+int main(){
+  
+  char runThis;
+  printf("Enter programs to run.\n");
+  scanf("%c", &runThis);
+  printf("Entered program: %c", runThis);
+
+  
+
+
+
+
+
+
+
+  return 0;
+}
+
