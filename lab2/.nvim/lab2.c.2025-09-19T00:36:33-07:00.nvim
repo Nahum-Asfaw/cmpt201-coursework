@@ -46,8 +46,8 @@ int main() {
 
     } else {
       if (execl(runThis, runThis, (char *)NULL) == -1) {
-        printf("Exec failure\n"); // I didn't use perror as the example output
-                                  // didn't give error info
+        printf("Exec failure\n"); // I didn't use perror as the example output didn't
+                                  // give error info
       }
     }
   }
