@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// solution shown in lab1, on the first lab of tuesday
 
 int main(void) {
 
