@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define SIZE 5
+
+void processInput(char *input, char *history) {
+
+  if (strcmp(input, "print")) {
+    printf("%s\n", history);
+  }
+}
+
+void reading(char *input, char *history, size_t n) {
+
+  while (strcmp(input, "print") == 0) {
+    printf("Enter: ");
+    getline(&input, &n, stdin);
+  }
+}
+
+void ifFull(char *history, int lineNum) {
+
+  free(&history[SIZE - 1]);
+  for (int i = 0; i < SIZE; i++) {
+    history[i] = history[i + 1];
+  }
+}
+
+static size_t n = 0; // lab 1
+
+int main() {
+
+  char *input; // lab 1 implementation
+  char *history[SIZE];
+  int lineNum = 0;
+
+  while (1) {
+
+    printf("Enter: ");
+
+    if (lineNum == 5) {
+      ifFull(*history, lineNum);
+    }
+
+    getline(&history[lineNum], &n, stdin);
+
+    if (strcmp(history[lineNum], "print\n") == 0) {
+      for (int i = 0; i <= lineNum; i++) {
+        printf("%s", history[i]);
+      }
+    }
+
+    printf("\n");
+
+    if (lineNum < 5) {
+      lineNum++;
+    }
+  }
+
+  return 0;
+}
