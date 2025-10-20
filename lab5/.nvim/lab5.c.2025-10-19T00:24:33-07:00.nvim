@@ -1,0 +1,178 @@
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+struct header {
+  uint64_t size;
+  struct header *next;
+  int id;
+  bool free;
+};
+
+void initialize_block(struct header *block, uint64_t size, struct header *next,
+                      int id) {
+  block->size = size;
+  block->next = next;
+  block->id = id;
+  block->free = true;
+}
+
+void print_list(struct header *free_list_ptr) {
+
+  struct header *current = free_list_ptr;
+  int i = 0;
+  while (current != NULL) {
+    printf("Element: %d, Size: %lu, ID: %d\n", i, current->size, current->id);
+    printf("------------------------\n");
+    i++;
+    current = current->next;
+  }
+}
+
+int find_first_fit(struct header *free_list_ptr, uint64_t size) {
+  int find_first_id = -1;
+  struct header *current = free_list_ptr;
+  struct header *prev = NULL;
+  struct header *allocated_block = NULL; // This is what you'll return
+
+  while (current != NULL) {      // google gemini
+    if (current->size >= size) { // Found a suitable block
+
+      uint64_t old_size = current->size;
+      allocated_block = current; // This is the block we'll allocate
+
+      // Check if there's enough leftover space for a new free block header
+      if ((old_size - size) >= sizeof(struct header)) {
+        // --- SPLIT THE BLOCK ---
+
+        // 1. Calculate the address of the new free block's header
+        struct header *new_free_block =
+            (struct header *)((char *)current + size);
+
+        // 2. Initialize the new free block with the leftover size
+        // It will link to whatever 'current' was pointing to.
+        initialize_block(new_free_block, old_size - size, current->next,
+                         current->id);
+        // (You'll want to make sure initialize_block sets block->free = true)
+
+        // 3. Relink the list to use the new_free_block instead of 'current'
+        if (prev == NULL) {
+          // 'current' was the head. The new free block is now the head.
+          free_list_ptr = new_free_block;
+        } else {
+          // 'current' was in the middle. Link 'prev' to the new free block.
+          prev->next = new_free_block;
+        }
+
+        // 4. Set the final size of the block we're allocating
+        allocated_block->size = size;
+
+        // 5. Finalize the allocated block before returning
+        allocated_block->free = false; // Mark it as used
+        allocated_block->next = NULL;  // It's not in the free list anymore
+
+        break; // We found our block, so exit the loop
+      
+
+      // Didn't find it yet, move to the next node
+      prev = current;
+      current = current->next;
+    }
+    return find_first_id;
+  }
+
+  int find_best_fit(struct header * free_list_ptr, uint64_t size) {
+    int best_fit_id = -1;
+    struct header *current = free_list_ptr;
+    uint64_t closest_size = 256;
+
+    while (current != NULL) {
+      if (current->size <= closest_size && current->size >= size)
+        closest_size = current->size;
+      current = current->next;
+    } // now I've got the best fitting block size
+
+    struct header *current2 = free_list_ptr; // reset current
+    while (current2 != NULL) {
+      if (current2->size == closest_size) {
+        best_fit_id = current2->id;
+        struct header *new_best =
+            (struct header *)malloc(sizeof(struct header));
+        initialize_block(new_best, current2->size - size, free_list_ptr,
+                         best_fit_id);
+        break;
+      }
+      current2 = current2->next;
+    }
+    return best_fit_id;
+  }
+
+  int find_worst_fit(struct header * free_list_ptr, uint64_t size) {
+    int worst_fit_id = -1;
+    struct header *current = free_list_ptr;
+    uint64_t worst_size = 0;
+
+    while (current != NULL) { // basically find the largest
+      if (current->size >= worst_size && current->size >= size)
+        worst_size = current->size;
+      current = current->next;
+    }
+    struct header *current2 = free_list_ptr; // reset current
+    while (current2 != NULL) {
+      if (current2->size == worst_size) {
+        worst_fit_id = current2->id;
+        struct header *new_best =
+            (struct header *)malloc(sizeof(struct header));
+        initialize_block(new_best, current2->size - size, free_list_ptr,
+                         worst_fit_id);
+        break;
+      }
+      current2 = current2->next;
+    }
+    return worst_fit_id;
+  }
+
+  int main(void) {
+
+    struct header *free_block1 = (struct header *)malloc(sizeof(struct header));
+    struct header *free_block2 = (struct header *)malloc(sizeof(struct header));
+    struct header *free_block3 = (struct header *)malloc(sizeof(struct header));
+    struct header *free_block4 = (struct header *)malloc(sizeof(struct header));
+    struct header *free_block5 = (struct header *)malloc(sizeof(struct header));
+    struct header *free_block_example =
+        (struct header *)malloc(sizeof(struct header));
+
+    /*
+    initialize_block(free_block1, 6, free_block2, 1);
+    initialize_block(free_block2, 12, free_block3, 2);
+    initialize_block(free_block3, 24, free_block4, 3);
+    initialize_block(free_block4, 8, free_block5, 4);
+    */
+    initialize_block(free_block_example, 10, NULL, 1);
+
+    struct header *free_list_ptr = free_block_example;
+
+    printf("Before find_first_fit:\n------------------------\n");
+    print_list(free_list_ptr);
+    int first_fit_id = find_first_fit(free_list_ptr, 7);
+    printf("After find_first_fit:\n------------------------\n");
+    print_list(free_list_ptr);
+    // int best_fit_id = find_best_fit(free_list_ptr, 7);
+    // int worst_fit_id = find_worst_fit(free_list_ptr, 7);
+
+    // TODO: Print out the IDs
+    // printf("The ID for First-Fit algorithm is: %d\n", first_fit_id);
+    // printf("The ID for Best-Fit algorithm is: %d\n", best_fit_id);
+    // printf("The ID for Worst-Fit algorithm is: %d\n", worst_fit_id);
+
+    free(free_block1);
+    free(free_block2);
+    free(free_block3);
+    free(free_block4);
+    free(free_block5);
+    free(free_block_example);
+
+    return 0;
+  }

@@ -11,16 +11,17 @@ struct header {
   bool free;
 };
 
-struct header *list_new(void) {
+void print_list(struct header *free_list_ptr) {
 
-  struct header *newHeader = malloc(sizeof(*newHeader));
-  if (newHeader == NULL) {
-    perror("Malloc failed\n");
-    exit(EXIT_FAILURE);
+  struct header *current = free_list_ptr;
+  int i = 0;
+  while (current != NULL) {
+    printf("Element: %d, Size: %lu, ID: %d\n", i, current->size, current->id);
+    printf("------------------------\n");
+    i++;
+    current = current->next;
   }
-  return newHeader;
 }
-
 void initialize_block(struct header *block, uint64_t size, struct header *next,
                       int id) {
   block->size = size;
@@ -29,50 +30,21 @@ void initialize_block(struct header *block, uint64_t size, struct header *next,
   block->free = true;
 }
 
-void print_list(struct header *free_list_ptr) {
 
-  struct header *current = free_list_ptr;
-  int i = 0;
-  while (current != NULL) {
-    printf("Element: %d, Size: %lu, ID: %d, ", i, current->size, current->id);
-    if (current->free == true)
-      printf("Free: true\n");
-    else
-      printf("Free: false\n");
-    printf("---------------------------------------\n");
-    i++;
-    current = current->next;
-  }
-}
-void adjust_id(struct header **free_list_ptr) {
-  struct header *current = *free_list_ptr;
-  while (current != NULL) {
-    current->id++;
-    current = current->next;
-  }
-}
-
-int find_first_fit(struct header **free_list_ptr, uint64_t size) {
+int find_first_fit(struct header *free_list_ptr, uint64_t size) {
   int find_first_id = -1;
   uint64_t old_size = 0;
-  struct header *current = *free_list_ptr; // start at the head
-  while (current != NULL) {                // go through the list
-    if (current->size >= size) {           // first block large enough
+  struct header *current = free_list_ptr; // start at the head
+  while (current != NULL) {               // go through the list
+    if (current->size >= size) {          // first block large enough
                                  // split the block in two, make new head
       find_first_id = current->id;
       old_size = current->size;
-      current->size = size;
-      adjust_id(&current);
-      current->free = false;
-
-      // all of this could be handled by initialize block...
+      current->size = size; // set size of the allocated block to size
       struct header *new_head = (struct header *)malloc(sizeof(struct header));
-      new_head->next = *free_list_ptr;
-      new_head->size = old_size - size;
-      new_head->id = find_first_id;
-      new_head->free = true;
-
-      *free_list_ptr = new_head;
+      initialize_block(new_head, old_size - size, free_list_ptr, find_first_id);
+      // initialize_block(free_list_ptr, size, NULL, find_first_id++);
+      free_list_ptr = new_head;
       break;
     }
     current = current->next;
@@ -131,31 +103,28 @@ int find_worst_fit(struct header *free_list_ptr, uint64_t size) {
 
 int main(void) {
 
-  /*
   struct header *free_block1 = (struct header *)malloc(sizeof(struct header));
   struct header *free_block2 = (struct header *)malloc(sizeof(struct header));
   struct header *free_block3 = (struct header *)malloc(sizeof(struct header));
   struct header *free_block4 = (struct header *)malloc(sizeof(struct header));
   struct header *free_block5 = (struct header *)malloc(sizeof(struct header));
-  */
-  struct header *free_block_1 = list_new();
-  struct header *free_block_2 = list_new();
+  struct header *free_block_example =
+      (struct header *)malloc(sizeof(struct header));
+
   /*
   initialize_block(free_block1, 6, free_block2, 1);
   initialize_block(free_block2, 12, free_block3, 2);
   initialize_block(free_block3, 24, free_block4, 3);
   initialize_block(free_block4, 8, free_block5, 4);
   */
-  initialize_block(free_block_1, 10, free_block_2, 1);
-  initialize_block(free_block_2, 8, NULL, 2);
+  initialize_block(free_block_example, 10, NULL, 1);
 
-  struct header *free_list_ptr = free_block_1;
+  struct header *free_list_ptr = free_block_example;
 
-  printf("Before find_first_fit:\n---------------------------------------\n");
+  printf("Before find_first_fit:\n------------------------\n");
   print_list(free_list_ptr);
-  int first_fit_id = find_first_fit(&free_list_ptr, 7);
-  printf(
-      "List after find_first_fit:\n---------------------------------------\n");
+  int first_fit_id = find_first_fit(free_list_ptr, 7);
+  printf("After find_first_fit:\n------------------------\n");
   print_list(free_list_ptr);
   // int best_fit_id = find_best_fit(free_list_ptr, 7);
   // int worst_fit_id = find_worst_fit(free_list_ptr, 7);
@@ -165,14 +134,12 @@ int main(void) {
   // printf("The ID for Best-Fit algorithm is: %d\n", best_fit_id);
   // printf("The ID for Worst-Fit algorithm is: %d\n", worst_fit_id);
 
-  free(free_block_1);
-  free(free_block_2);
-  /*
+  free(free_block1);
+  free(free_block2);
   free(free_block3);
   free(free_block4);
   free(free_block5);
   free(free_block_example);
-  */
 
   return 0;
 }
