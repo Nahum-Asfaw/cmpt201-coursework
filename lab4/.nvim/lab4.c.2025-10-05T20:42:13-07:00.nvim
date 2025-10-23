@@ -1,0 +1,6 @@
+//pseduocode:
+// .
+// .
+// . 
+// get starting address
+// int i = sbrk(0)

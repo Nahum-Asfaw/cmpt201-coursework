@@ -1,0 +1,13 @@
+// pseduocode:
+//  .
+//  .
+//  .
+//
+// struct {
+// unit64_t size;
+// struct header*next;
+// };
+//
+//  //get starting address
+//  int i = sbrk(0)
+//

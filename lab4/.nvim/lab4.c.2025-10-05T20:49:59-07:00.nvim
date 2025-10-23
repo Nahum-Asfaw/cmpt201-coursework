@@ -1,0 +1,18 @@
+// pseduocode:
+//  .
+//  .
+//  .
+//
+// struct {
+// unit64_t size;
+// struct header*next;
+// };
+//
+//  // get starting address
+//  char *location = sbrk(0)
+//  
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
