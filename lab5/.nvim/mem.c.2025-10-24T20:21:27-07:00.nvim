@@ -1,0 +1,37 @@
+#define _POSIX_C_SOURCE 200809
+#define _DEFAULT_SOURCE
+
+#include <ctype.h>
+#include <linux/limits.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+struct header {
+  uint64_t size;
+  struct header *next;
+};
+
+int main() {
+  char *heap_start = sbrk(0);
+
+  struct header *free_list_ptr = NULL;
+
+  struct header *one = (struct header *)(heap_start);
+  struct header *two = (struct header *)(heap_start + 100);
+  one->next = two;
+  one->size = 100;
+  two->next = NULL;
+  two->size = 100;
+
+  free_list_ptr = one;
+  struct header *current = free_list_ptr;
+
+  char buff[PATH_MAX];
+  while (current != NULL) {
+    sprintf(buff, "%ld", sizeof(current));
+    write(STDOUT_FILENO, buff, strlen(buff));
+  }
+}

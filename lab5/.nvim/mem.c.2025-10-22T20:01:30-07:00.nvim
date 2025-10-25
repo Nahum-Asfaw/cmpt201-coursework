@@ -1,0 +1,15 @@
+#include <ctype.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+struct header {
+  uint64_t size;
+  struct header *next;
+};
+
+int main() {
+  int size = sizeof(int32_t) * 2;
+  printf("sizof(int32_t) * 2 = %d\n", size);
+}

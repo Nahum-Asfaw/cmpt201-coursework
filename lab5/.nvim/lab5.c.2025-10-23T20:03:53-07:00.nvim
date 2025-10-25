@@ -62,7 +62,7 @@ int find_first_fit(struct header **free_list_ptr, uint64_t size) {
       find_first_id = current->id;
       old_size = current->size;
       current->size = size;
-      adjust_id(&current);   // not in A9
+      adjust_id(&current); // not in A9
       current->free = false; // not in A9
 
       // all of this could be handled by initialize block...

@@ -1,0 +1,38 @@
+#define _POSIX_C_SOURCE 200809
+#define _DEFAULT_SOURCE
+
+#include <ctype.h>
+#include <linux/limits.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#define INCREMENT 1000
+
+struct header {
+  uint64_t size;
+  struct header *next;
+};
+
+int main() {
+  char *heap_start = sbrk(INCREMENT);
+
+  struct header *one = (struct header *)(heap_start);
+  struct header *two = (struct header *)(heap_start + 100);
+  one->next = two;
+  one->size = 100;
+  two->next = NULL;
+  two->size = 100;
+
+  struct header *free_list_ptr = one;
+  struct header *current = free_list_ptr;
+
+  char buff[PATH_MAX];
+  while (current != NULL) {
+    sprintf(buff, "%ld", &current);
+    write(STDOUT_FILENO, buff, strlen(buff));
+    write(STDOUT_FILENO, "\n", strlen("\n"));
+    current = current->next;
+  }
+}
