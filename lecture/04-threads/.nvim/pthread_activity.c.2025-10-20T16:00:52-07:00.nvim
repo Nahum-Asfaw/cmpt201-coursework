@@ -1,0 +1,29 @@
+#include <errno.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+void *my_thread(void *arg) {
+  char *message = arg;
+  printf("Inside a thread!\n");
+  printf("Message is: %s\n", message);
+  return (void *)strlen(message);
+}
+
+int main() {
+
+  printf("Hello world!\n");
+  pthread_t thread_id;
+
+  pthread_create(&thread_id, NULL, my_thread, "Hello threads!");
+
+  // sleep(5);
+  void *ans;
+  pthread_join(thread_id, ans);
+  uint64_t len = (uint64_t)ans;
+  printf("Done: answer is %lu.\n", len);
+
+  return 0;
+}
