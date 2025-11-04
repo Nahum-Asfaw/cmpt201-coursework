@@ -84,9 +84,11 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
   }
 
   // Wait for threads to finish
-  if (pthread_join(*threads, NULL) != 0) {
-    perror("pthread_join error!\n");
-    exit(1);
+  for (int i = 0; i < THREAD_COUNT; i++) {
+    if (pthread_join(threads[i], NULL) != 0) {
+      perror("pthread_join error!\n");
+      exit(1);
+    }
   }
 
   // Cleanup
