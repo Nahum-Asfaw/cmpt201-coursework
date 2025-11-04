@@ -65,7 +65,7 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
 
   // Launch threads
   for (size_t i = 0; i < THREAD_COUNT; i++) {
-
+    pthread_mutex_lock(&count_mutex);
     word_t *thread_arg_words = words + i * chunk_size;
     size_t thread_arg_num_words =
         chunk_size + (i == THREAD_COUNT - 1 ? num_words % THREAD_COUNT : 0);
@@ -76,11 +76,12 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
 
     // KEEP WORKING ON TASK 2
     int rc = pthread_create(&threads[i], NULL, counter_thread_func,
-                            NULL); // suggested by gemini
+                            (void *)threads_args[i]); // suggested by gemini
     if (rc != 0) {
       perror("pthread_create error!\n");
       exit(1);
     }
+    pthread_mutex_unlock(&count_mutex);
   }
 
   // Wait for threads to finish
@@ -89,6 +90,9 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
       perror("pthread_join error!\n");
       exit(1);
     }
+  }
+  for (int i = 0; i < THREAD_COUNT; i++) {
+    free(threads_args[i]);
   }
 
   // Cleanup

@@ -1,7 +1,7 @@
 [
 {
   "directory": "/home/cmpt201/cmpt201-coursework/lab8/build",
-  "command": "/usr/bin/clang  -I/home/cmpt201/cmpt201-coursework/lab8/include -g -pthread -o CMakeFiles/main.dir/src/lab8.c.o -c /home/cmpt201/cmpt201-coursework/lab8/src/lab8.c",
+  "command": "/usr/bin/clang  -I/home/cmpt201/cmpt201-coursework/lab8/include -g -fsanitize=thread -g -pthread -o CMakeFiles/main.dir/src/lab8.c.o -c /home/cmpt201/cmpt201-coursework/lab8/src/lab8.c",
   "file": "/home/cmpt201/cmpt201-coursework/lab8/src/lab8.c",
   "output": "CMakeFiles/main.dir/src/lab8.c.o"
 }

@@ -8,13 +8,12 @@ project(
 
 set(CMAKE_BUILD_TYPE Debug)
 
-# add_compile_options(-fsanitize=thread -g) add_link_options(-fsanitize=thread
-# -g)
-
 # Note: ASan and TSan are incompatible Address sanitization:
 # add_compile_options(-fsanitize=address) add_link_options(-fsanitize=thread)
 # --------- Task 3 ---------
 # Enable the thread sanitizer
+add_compile_options(-fsanitize=thread -g)
+add_link_options(-fsanitize=thread -g)
 
 add_compile_options(-pthread)
 add_link_options(-pthread)
