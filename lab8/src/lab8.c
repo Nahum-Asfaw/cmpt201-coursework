@@ -33,6 +33,7 @@ static void add_word_counts_in_chunk(count_map_t *map, word_t *words,
   // Make this function thread-safe by using the lock
 
   for (size_t i = 0; i < num_words; i++) {
+    pthread_mutex_lock(lock);
     word_count_entry_t *w = NULL;
     HASH_FIND_STR(*map, words[i], w);
 
@@ -42,6 +43,7 @@ static void add_word_counts_in_chunk(count_map_t *map, word_t *words,
       w = create_entry(words[i], 1);
       HASH_ADD_STR(*map, word, w);
     }
+    pthread_mutex_unlock(lock);
   }
 }
 
@@ -65,7 +67,7 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
 
   // Launch threads
   for (size_t i = 0; i < THREAD_COUNT; i++) {
-    pthread_mutex_lock(&count_mutex);
+
     word_t *thread_arg_words = words + i * chunk_size;
     size_t thread_arg_num_words =
         chunk_size + (i == THREAD_COUNT - 1 ? num_words % THREAD_COUNT : 0);
@@ -81,7 +83,6 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
       perror("pthread_create error!\n");
       exit(1);
     }
-    pthread_mutex_unlock(&count_mutex);
   }
 
   // Wait for threads to finish
