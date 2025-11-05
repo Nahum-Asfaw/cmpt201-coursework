@@ -1,0 +1,15 @@
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+int main() {
+  char buf[12];
+
+  int fd = open("tmp", O_RDWR | O_CREAT, 0);
+  write(fd, "hi\n", strlen("hi\n"));
+  lseek(fd, -6, SEEK_CUR);  
+
+  int c = close(fd);
+}

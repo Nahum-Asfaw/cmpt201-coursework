@@ -1,0 +1,30 @@
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+int main() {
+  char buf[12];
+
+  int fd = open("tmp", O_RDWR | O_CREAT);
+  if (fd == -1) {
+    perror("Open failed\n");
+    exit(1);
+  }
+  char *msg = "ABCEDEFG";
+
+  write(fd, "Hello World!\n", strlen("Hello World\n"));
+  for (;;) {
+
+    write(fd, msg, strlen(msg));
+    lseek(fd, -6, SEEK_CUR);
+    read(fd, buf, 6);
+    sleep(30);
+
+    /*
+    write(STDOUT_FILENO, buf, 6);
+    write(STDOUT_FILENO, "\n", strlen("\n"));
+    */
+  }
+}

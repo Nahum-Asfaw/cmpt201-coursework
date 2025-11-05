@@ -1,0 +1,10 @@
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main() {
+  int fd = open("tmp", O_RDWR | O_CREAT, 0);
+  write(fd, "hi", 2);
+  int c = close(fd);
+}
