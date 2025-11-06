@@ -1,0 +1,17 @@
+#include <errno.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void *mythread(void *arg) {
+  //
+  printf("Inside a thread!\n");
+  return NULL;
+}
+
+int main() {
+
+  printf("Hello world!\n");
+  return 0;
+}

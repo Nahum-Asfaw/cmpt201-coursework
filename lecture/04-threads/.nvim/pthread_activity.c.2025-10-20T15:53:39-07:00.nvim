@@ -1,0 +1,24 @@
+#include <errno.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void *my_thread(void *arg) {
+  printf("Inside a thread!\n");
+  return NULL;
+}
+
+int main() {
+
+  printf("Hello world!\n");
+  pthread_t thread_id;
+
+  pthread_create(&thread_id, NULL, my_thread, NULL);
+
+  // sleep(5);
+  pthread_join(thread_id, NULL);
+  printf("Done.\n");
+
+  return 0;
+}

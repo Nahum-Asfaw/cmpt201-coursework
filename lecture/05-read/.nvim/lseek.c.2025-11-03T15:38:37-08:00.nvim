@@ -1,0 +1,11 @@
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+int main() {
+  int fd = open("tmp", O_RDWR | O_CREAT, 0);
+  write(fd, "hi\n", strlen("hi\n"));
+  int c = close(fd);
+}

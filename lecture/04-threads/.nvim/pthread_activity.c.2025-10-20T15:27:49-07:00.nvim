@@ -1,0 +1,19 @@
+#include <errno.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int foo(){
+
+  return 0;
+}
+
+int main() {
+
+  pthread_t thread;
+  char *a;
+  pthread_create(thread, , a, );
+
+  return 0;
+}

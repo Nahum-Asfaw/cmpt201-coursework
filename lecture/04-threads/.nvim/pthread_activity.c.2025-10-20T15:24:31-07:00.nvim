@@ -1,0 +1,13 @@
+#include <errno.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main() {
+  
+  pthread_t thread; 
+  pthread_create(thread,   
+  
+  return 0;
+}
