@@ -1,0 +1,27 @@
+// Server
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+
+int main() {
+  printf("SERVER:\n");
+
+  // socket
+  int socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+  if (socket_fd == -1) {
+    perror("Socket failed!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  // bind
+  if (bind(socket_fd, const struct sockaddr *addr, socklen_t addrlen) == -1) {
+    perror("Socket failed!\n");
+    exit(EXIT_FAILURE);
+  } 
+      // listen
+      // accept
+      // read
+      // close
+      return 0;
+    }

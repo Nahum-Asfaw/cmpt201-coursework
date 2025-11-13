@@ -1,0 +1,6 @@
+// this is the client
+
+int main() {
+  printf("CLIENT:\n");
+  return 0;
+}

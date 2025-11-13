@@ -1,0 +1,32 @@
+// this is the client
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <unistd.h>
+
+int main() {
+  printf("CLIENT:\n");
+
+  // socket
+  int socket_fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+  if (socket_fd == -1) {
+    perror("Socket failed!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  // write
+  char *msg = "Sockets are not fun (and Hello World).\n";
+  int bytes_written = write(socket_fd, msg, strlen(msg));
+  if (bytes_written == -1) {
+    perror("Write failed!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  // close
+  close(socket_fd);
+
+  return 0;
+}

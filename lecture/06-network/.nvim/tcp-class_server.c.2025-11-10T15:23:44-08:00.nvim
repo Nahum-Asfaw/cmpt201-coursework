@@ -1,0 +1,12 @@
+// Server
+#include <stdio.h>
+
+int main() {
+  printf("SERVER:\n");
+
+  // socket
+  // bind
+  // listen
+  // accept
+  return 0;
+}

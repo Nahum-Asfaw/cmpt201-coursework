@@ -1,0 +1,31 @@
+// Server
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+
+int main() {
+  printf("SERVER:\n");
+
+  // socket
+  int socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+  if (socket_fd == -1) {
+    perror("Socket failed!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  struct sockaddr_un sockstruct;
+  sockstruct.sun_family = AF_UNIX;
+  snprintf(sockstruct.sun_path, 108, "socket_fun");
+  /
+  // bind
+  if (bind(socket_fd, &sockstruct, sizeof(struct addr_un)) == -1) {
+    perror("Socket failed!\n");
+    exit(EXIT_FAILURE);
+  }
+  // listen
+  // accept
+  // read
+  // close
+  return 0;
+}

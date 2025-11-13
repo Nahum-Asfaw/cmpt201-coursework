@@ -1,0 +1,16 @@
+// Server
+#include <stdio.h>
+#include <sys/socket.h>
+
+int main() {
+  printf("SERVER:\n");
+
+  // socket
+  int socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+  // bind
+  // listen
+  // accept
+  // read
+  // close
+  return 0;
+}

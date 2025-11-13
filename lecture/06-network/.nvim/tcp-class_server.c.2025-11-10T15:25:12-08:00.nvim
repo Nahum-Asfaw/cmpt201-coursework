@@ -1,0 +1,15 @@
+// Server
+#include <stdio.h>
+#include <sys\socket.h>
+
+int main() {
+  printf("SERVER:\n");
+
+  // socket
+  // bind
+  // listen
+  // accept
+  // read
+  // close
+  return 0;
+}
