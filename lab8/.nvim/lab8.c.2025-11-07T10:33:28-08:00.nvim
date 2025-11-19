@@ -28,8 +28,7 @@ count_thread_args_t *pack_args(count_map_t *map, word_t *words,
                                size_t num_words, pthread_mutex_t *lock);
 
 static void add_word_counts_in_chunk(count_map_t *map, word_t *words,
-                                     size_t num_words,
-                                     pthread_mutex_t *lock) { // map func
+                                     size_t num_words, pthread_mutex_t *lock) { // map func
   // --------- Task 4 --------- \\
   // Make this function thread-safe by using the lock
 
