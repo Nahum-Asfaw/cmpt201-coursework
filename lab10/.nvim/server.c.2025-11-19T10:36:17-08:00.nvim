@@ -208,12 +208,7 @@ int main() {
   pthread_create(&acceptor_thread, NULL, run_acceptor, &aargs);
 
   // TODO: Wait until enough messages are received
-  for (;;) {
-    if (list_handle.count == MAX_CLIENTS * NUM_MSG_PER_CLIENT)
-      break;
-  }
-
-  // idk
+  while(){;}
 
   aargs.run = false;
   pthread_join(acceptor_thread, NULL);
