@@ -74,7 +74,7 @@ int init_server_socket() {
 void set_non_blocking(int fd) {
   int flags = fcntl(fd, F_GETFL, 0);
   if (flags == -1) {
-    perror("fcntl F_GETFL AHHHHHHH");
+    perror("fcntl F_GETFL");
     exit(EXIT_FAILURE);
   }
   if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {

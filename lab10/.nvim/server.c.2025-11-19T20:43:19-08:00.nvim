@@ -74,7 +74,7 @@ int init_server_socket() {
 void set_non_blocking(int fd) {
   int flags = fcntl(fd, F_GETFL, 0);
   if (flags == -1) {
-    perror("fcntl F_GETFL AHHHHHHH");
+    perror("fcntl F_GETFL");
     exit(EXIT_FAILURE);
   }
   if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
@@ -131,9 +131,6 @@ static void *run_client(void *args) {
 
       struct list_handle *list_handle = cargs->list_handle;
       // TODO: Safely use add_to_list to add new_node to the list
-      pthread_mutex_lock(cargs->list_lock);
-      add_to_list(list_handle, new_node);
-      pthread_mutex_unlock(cargs->list_lock);
     }
   }
 
@@ -162,8 +159,7 @@ static void *run_acceptor(void *args) {
           handle_error("accept");
         }
       } else {
-        printf("Client connected!\n"); // instruction from lab
-                                       // already present
+        printf("Client connected!\n");
 
         client_args[num_clients].cfd = cfd;
         client_args[num_clients].run = true;
@@ -172,8 +168,8 @@ static void *run_acceptor(void *args) {
         num_clients++;
 
         // TODO: Create a new thread to handle the client
-        pthread_create(&threads[num_clients], NULL, run_client,
-                       &client_args[num_clients]);
+         pthread_create(threads[num_clients], NULL, run_client,
+         client_args[num_clients]);
       }
     }
   }
@@ -182,12 +178,8 @@ static void *run_acceptor(void *args) {
 
   // Shutdown and cleanup
   for (int i = 0; i < num_clients; i++) {
-    //
     // TODO: Set flag to stop the client thread
-    client_args[i].run = false;
-
     // TODO: Wait for the client thread and close its socket
-    pthread_join(threads[i], NULL);
   }
 
   if (close(sfd) == -1) {
